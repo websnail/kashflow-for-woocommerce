@@ -1,0 +1,292 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kashflow for Woocommerce v0.0.9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-06-22 09:49:41+0000\n"
+"Last-Translator: swicks <support@devicesoftware.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED KINGDOM\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: classes/class-ds-api.php:78
+#@ ds-kashflow
+msgid "Failed to connect to KashFlow server."
+msgstr ""
+
+#. translators: plugin header field 'Name'
+#: ds-kashflow-for-woocommerce.php:0
+#@ ds-kashflow
+msgid "Kashflow for Woocommerce"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: ds-kashflow-for-woocommerce.php:0
+#@ ds-kashflow
+msgid "Kashflow for woocommerce"
+msgstr ""
+
+#. translators: plugin header field 'Author'
+#: ds-kashflow-for-woocommerce.php:0
+#@ ds-kashflow
+msgid "DeviceSoftware"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:393
+#@ ds-kashflow
+msgid "Shipping cost"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:706
+#@ ds-kashflow
+msgid "Account Settings"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:708
+#: settings/class-ds-settings-kashflow.php:161
+#@ ds-kashflow
+msgid "UserName"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:715
+#: settings/class-ds-settings-kashflow.php:168
+#@ ds-kashflow
+msgid "API Password"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:744
+#: settings/class-ds-settings-kashflow.php:262
+#@ ds-kashflow
+msgid "Nominal Codes"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:746
+#: settings/class-ds-settings-kashflow.php:264
+#@ ds-kashflow
+msgid "Sale of Goods"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:749
+#@ ds-kashflow
+msgid "Select 'Sales Type' for the products you are selling."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:753
+#: settings/class-ds-settings-kashflow.php:271
+#@ ds-kashflow
+msgid "Shipping Type"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:756
+#@ ds-kashflow
+msgid "Select 'Sales Type' for Shipping."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:763
+#: settings/class-ds-settings-kashflow.php:293
+#@ ds-kashflow
+msgid "Active Payment Gateways"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:786
+#: settings/class-ds-settings-kashflow.php:308
+#@ ds-kashflow
+msgid "Debugging"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:788
+#: settings/class-ds-settings-kashflow.php:310
+#@ ds-kashflow
+msgid "Test API"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:790
+#: settings/class-ds-settings-kashflow.php:312
+#@ ds-kashflow
+msgid "Test"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:791
+#: settings/class-ds-settings-kashflow.php:313
+#@ ds-kashflow
+msgid "unknown"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:894
+#@ ds-kashflow
+msgid "Failed to connect to API: "
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:898
+#@ ds-kashflow
+msgid "Connected to API successfully"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#. translators: plugin header field 'AuthorURI'
+#: ds-kashflow-for-woocommerce.php:0
+#@ ds-kashflow
+msgid "http://devicesoftware.com/kashflow-for-woocommerce/"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:722
+#: settings/class-ds-settings-kashflow.php:231
+#@ ds-kashflow
+msgid "Customer"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:724
+#: settings/class-ds-settings-kashflow.php:233
+#@ ds-kashflow
+msgid "Source of Business"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:727
+#: settings/class-ds-settings-kashflow.php:236
+#@ ds-kashflow
+msgid "Select New customers business source."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:778
+#@ ds-kashflow
+msgid "KashFlow Sales Type."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:796
+#: settings/class-ds-settings-kashflow.php:317
+#@ ds-kashflow
+msgid "Logging"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:798
+#: settings/class-ds-settings-kashflow.php:319
+#, php-format
+#@ ds-kashflow
+msgid "Log Kashflow API calls inside <code>plugins/woocommerce/logs/kashflow-%s.txt</code>"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:731
+#: settings/class-ds-settings-kashflow.php:240
+#@ ds-kashflow
+msgid "Invoicing"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:733
+#: settings/class-ds-settings-kashflow.php:242
+#@ ds-kashflow
+msgid "Order method"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:739
+#: settings/class-ds-settings-kashflow.php:249
+#@ ds-kashflow
+msgid "Invoice - KashFlow generates an Invoice and payment can be taken automatically."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:740
+#: settings/class-ds-settings-kashflow.php:257
+#@ ds-kashflow
+msgid "Quote - KashFlow generates a Quote allowing you to process and generate an Invoice via KashFlow."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:374
+#@ ds-kashflow
+msgid "Discount"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:572
+#@ ds-kashflow
+msgid "To:"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:575
+#@ ds-kashflow
+msgid "Subject:"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:576
+#@ ds-kashflow
+msgid "Invoice "
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:576
+#@ ds-kashflow
+msgid " from "
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:579
+#@ ds-kashflow
+msgid "Message:"
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:580
+#@ ds-kashflow
+msgid ""
+"Please see attached invoice.\n"
+"\n"
+"Regards,\n"
+"Accounts Dept."
+msgstr ""
+
+#: ds-kashflow-for-woocommerce.php:587
+#@ ds-kashflow
+msgid "Send Email"
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:18
+#@ ds-kashflow
+msgid "KashFlow"
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:159
+#@ ds-kashflow
+msgid "KashFlow Settings"
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:163
+#@ ds-kashflow
+msgid "This is normally the same as your login name"
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:170
+#@ ds-kashflow
+msgid "Tip: Use different password to normal login (change in KashFlow Settings-API-Password Settings) "
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:252
+#@ ds-kashflow
+msgid "Only send completed orders to KashFlow for invoicing."
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:267
+#@ ds-kashflow
+msgid "Select KashFlow's Sales Type for the products you are selling."
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:274
+#@ ds-kashflow
+msgid "Select KashFlow's Sales Type for Shipping."
+msgstr ""
+
+#: settings/class-ds-settings-kashflow.php:300
+#@ ds-kashflow
+msgid "Select KashFlow's Sales Type."
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: ds-kashflow-for-woocommerce.php:0
+#@ ds-kashflow
+msgid "0.0.9"
+msgstr ""
+
