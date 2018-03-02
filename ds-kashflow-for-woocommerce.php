@@ -236,36 +236,36 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
             // create a KashFlow customer class instance
             $customer = new KF_Customer();
-            if(!empty($order->billing_company))
+            if(!empty($order->get_billing_company))
             {
-                $customer->Name =  $order->billing_company;
+                $customer->Name =  $order->get_billing_company;
             }
             else
             {
-                $customer->Name =  $order->billing_first_name . ' ' .  $order->billing_last_name;
+                $customer->Name =  $order->get_billing_first_name() . ' ' .  $order->get_billing_last_name;
             }        
-            $customer->Contact = $order->billing_first_name . ' ' .  $order->billing_last_name;
-            $customer->ContactFirstName = $order->billing_first_name;
-            $customer->ContactLastName = $order->billing_last_name;        
-            $customer->Telephone = $order->billing_phone;
-            $customer->Email = $order->billing_email;
-            $customer->Address1 = $order->billing_address_1;
-            $customer->Address2 = $order->billing_address_2;
-            $customer->Address3 = $order->billing_city . ' ' . $order->billing_state;
-            $customer->Address4 = $order->billing_country;
-            $customer->Postcode = $order->billing_postcode;
+            $customer->Contact = $order->get_billing_first_name . ' ' .  $order->get_billing_last_name;
+            $customer->ContactFirstName = $order->get_billing_first_name;
+            $customer->ContactLastName = $order->get_billing_last_name;
+            $customer->Telephone = $order->get_billing_phone;
+            $customer->Email = $order->get_billing_email;
+            $customer->Address1 = $order->get_billing_address_1;
+            $customer->Address2 = $order->get_billing_address_2;
+            $customer->Address3 = $order->get_billing_city . ' ' . $order->get_billing_state;
+            $customer->Address4 = $order->get_billing_country;
+            $customer->Postcode = $order->get_billing_postcode;
             $customer->CustHasDeliveryAddress = 1;
-            $customer->DeliveryAddress1 = $order->shipping_address_1;
-            $customer->DeliveryAddress2 = $order->shipping_address_2;
-            $customer->DeliveryAddress3 = $order->shipping_city . ' ' . $order->shipping_state;
-            $customer->DeliveryAddress4 = $order->shipping_country;
-            $customer->DeliveryPostcode = $order->shipping_postcode;
+            $customer->DeliveryAddress1 = $order->get_shipping_address_1;
+            $customer->DeliveryAddress2 = $order->get_shipping_address_2;
+            $customer->DeliveryAddress3 = $order->get_shipping_city . ' ' . $order->get_shipping_state;
+            $customer->DeliveryAddress4 = $order->get_shipping_country;
+            $customer->DeliveryPostcode = $order->get_shipping_postcode;
 
             $this->logit( 'customer - ' . print_r( $customer, true ) );
 
             // update KashFlow with customer information from WooCommerce Order
             $customer_id = 0;
-            if($existing_customer = $this->api->get_customer_by_email($order->billing_email))
+            if($existing_customer = $this->api->get_customer_by_email($order->get_billing_email))
             {
                 // existing customer
                 $customer->data = array_merge($existing_customer->data, $customer->data );
@@ -297,14 +297,14 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                 $totals = $order->get_order_item_totals();
                 $items = $order->get_items();
                 $kf_order = ( $order_method === 'quote' )? new KF_Quote( !count( $items ) ) : new KF_Invoice(!count($items));
-                $order_number = isset( $order->order_number) ? $order->order_number : $order_id;
+                $order_number = $order->get_order_number() ? $order->get_order_number() : $order_id;
                 $kf_order->InvoiceNumber = $order_number;
                 $kf_order->Customer = $customer->Name;
                 $kf_order->CustomerID =  $customer_id;
 
                 $order_tax = $order->get_total_tax();  
-                $order_discount = $order->get_total_discount();   
-                $order_net = $order->get_order_total() - $order_tax;
+                $order_discount = $order->get_discount_total();
+                $order_net = $order->get_total() - $order_tax;
 
                 
                 $kf_order->NetAmount = $order_net;
@@ -387,13 +387,13 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
                 // add shipping item 
                 // TODO 4 -o swicks : always displays as order_shipping returns "0.00" if empty
-                if($order->order_shipping)
+                if($order->get_shipping_total())
                 {
                     $line = ( $order_method === 'quote' )? new KF_Quote_Line( false ) : new KF_Invoice_Line( false );
                     $line->Description = __('Shipping cost', 'ds-kashflow');
                     $line->Quantity = 1;
-                    $line->Rate = $order->order_shipping;
-                    $line->VatAmount = $order->order_shipping_tax;
+                    $line->Rate = $order->get_shipping_total();
+                    $line->VatAmount = $order->get_shipping_tax();
                     $line->ChargeType = get_option('ds_kashflow_shipping_type') ? get_option('ds_kashflow_shipping_type') : $default_sale_of_goods;
                     $line->LineID = $cnt++;
                     $line->VatRate = $this->calc_shipping_tax_rate();
@@ -437,7 +437,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
             else
             {
                 $order = new WC_Order($order_id);
-                $order_number = isset( $order->order_number) ? $order->order_number : $order_id;
+                $order_number = isset( $order->get_order_number()) ? $order->get_order_number() : $order_id;
                 $this->update_customer( $order_number );
             }
         }
