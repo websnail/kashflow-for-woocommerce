@@ -437,7 +437,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
             else
             {
                 $order = new WC_Order($order_id);
-                $order_number = isset( $order->get_order_number()) ? $order->get_order_number() : $order_id;
+                $order_number = $order->get_order_number() ? $order->get_order_number() : $order_id;
                 $this->update_customer( $order_number );
             }
         }
@@ -465,15 +465,15 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
                 $total_amount = $order->get_total();
                 $invoice_payment = new KF_Invoice_Payment();
-                $order_number = isset( $order->order_number) ? $order->order_number : $order_id;
+                $order_number = $order->get_order_number() ? $order->get_order_number() : $order_id;
                 $invoice_payment->PayInvoice = $order_number;
                 $invoice_payment->PayAmount = $total_amount;        
-                if( $pay_method = get_option( 'ds_kashflow_gw_' . $order->payment_method ) )
+                if( $pay_method = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() ) )
                 {
                     $invoice_payment->PayMethod = $pay_method;
                     $this->logit( 'sales invoice payment method - ' . $pay_method );
                 }
-                if( $bank_account = get_option( 'ds_kashflow_gw_' . $order->payment_method . '_bank_account' ) )
+                if( $bank_account = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() . '_bank_account' ) )
                 {
                     $invoice_payment->PayAccount = $bank_account;
                 }
@@ -570,7 +570,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                 <div id="ds_kashflow_error" class="error-message"></div>
                 <p class="form-field form-field-wide" >
                     <label for="ds_kashflow_inv_to"><?php _e( 'To:', 'ds-kashflow' ); ?></label><br />
-                    <input id="ds_kashflow_inv_to" type="text" value="<?php echo $order->billing_email ?>" /></p>
+                    <input id="ds_kashflow_inv_to" type="text" value="<?php echo $order->get_billing_email() ?>" /></p>
                 <p class="form-field">
                     <label for="ds_kashflow_inv_subject"><?php _e( 'Subject:', 'ds-kashflow' ); ?></label><br />
                     <input id="ds_kashflow_inv_subject" type="text" value="<?php echo __( 'Invoice ', 'ds-kashflow' ) . $order_number . __( ' from ', 'ds-kashflow' ) . $company_details['CompanyName']; ?>" />
