@@ -323,12 +323,32 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                     // get product
                     $product = get_product( $item['product_id'] );
                     $line = ( $order_method === 'quote' )? new KF_Quote_Line( false ) : new KF_Invoice_Line( false );
-                    $line->Description = $item['name'];
-                    $qty = $item['qty'];
-                    $line->Quantity = $qty; 
+
                     // HACK 0 -o swicks :Match the pennies / totals
                     $line_sub_total = $item['line_subtotal'];
-                    $unit_rate = round($line_sub_total / $qty, 2);
+
+                    /*
+                     * If the line rate is within 2 decimal places we input line as experience with line quantity and unit pricing
+                     * If line will not round to 2 decimal places we use description to record the actual quantity and unit cost data
+                     *
+                     * This is necessary because KashFloow does not allow greater precision than 2 decimal points so small/low value
+                     * items can banjax the line totals
+                     */
+                    $line_adjust = false;
+	                if (round($line_sub_total / $item['qty'], 2) == $line_sub_total / $item['qty']) {
+		                $qty = $item['qty'];
+		                $unit_rate = round($line_sub_total / $qty, 2);
+                    }
+                    else {
+	                    $line_adjust = true;    // Indicates we have a 2dp+ adjusted item
+	                    $qty = 1;
+	                    $unit_rate = $line_sub_total;
+	                    $item['name'] .= "\n(Quantity: {$item['qty']} @ ".$line_sub_total / $qty." (each)";
+	                    //TODO Check if use \n or <BR /> markup to newline the additional information
+                    }
+
+	                $line->Description = $item['name'];
+	                $line->Quantity = $qty;
                     $line_rate = $unit_rate * $qty;
                     $line_total = $line_sub_total + $item['line_tax'];
                     $line->Rate = $unit_rate;
@@ -347,18 +367,21 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                         }
                         else
                         {
-                            $sub_product = new KF_Sub_Product();
-                            $sub_product->ParentID = $default_sale_of_goods;
-                            $sub_product->Name = $item['name'];
-                            $sub_product->Description = $item['name'];
-                            $sub_product->Code = $sku;
-                            $sub_product->VatRate = $vat_rate;
-                            $sub_product->Price = $unit_rate;
-                            $sub_product->Managed = 1;
-                            $sub_product->QtyInStock = 0;
-                            $sub_product->StockWarnQty = 0;
-                            $res = $this->api->update_sub_product_by_code( $sub_product );
-                            $line->ProductID = $res;
+                            // Don't add products for any 2dp+ adjusted items
+                            if($line_adjust !== true) {
+	                            $sub_product               = new KF_Sub_Product();
+	                            $sub_product->ParentID     = $default_sale_of_goods;
+	                            $sub_product->Name         = $item['name'];
+	                            $sub_product->Description  = $item['name'];
+	                            $sub_product->Code         = $sku;
+	                            $sub_product->VatRate      = $vat_rate;
+	                            $sub_product->Price        = $unit_rate;
+	                            $sub_product->Managed      = 1;
+	                            $sub_product->QtyInStock   = 0;
+	                            $sub_product->StockWarnQty = 0;
+	                            $res                       = $this->api->update_sub_product_by_code( $sub_product );
+	                            $line->ProductID           = $res;
+                            }
                         }                    
                     }
 
