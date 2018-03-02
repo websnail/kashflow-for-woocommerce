@@ -1,19 +1,17 @@
 === Plugin Name ===
-Contributors: swicks
-Donate link: http://devicesoftware.com/kashflow-for-woocommerce/
-Tags: kashflow, accounts, accounting, woocommerce, woothemes, devicesoftware
-Requires at least: 3.5
-Tested up to: 3.9.1
-Stable tag: 0.0.9
+Contributors: websnail, swicks
+Tags: kashflow, accounts, accounting, woocommerce, woothemes, devicesoftware, snailsolutions
+Requires at least:
+Tested up to:
+Stable tag:
 
 KashFlow for WooCommerce
 
 == Description ==
 
 *****************************************
-THIS PLUGIN IS NO LONGER BEING DEVELOPED.
+PLUGIN REVIVED 01/03/18 by websnail
 *****************************************
-
 
 This plugin links your orders to an online accounts package call KashFlow.
 
@@ -25,11 +23,11 @@ Current functionality:-
     Generate a sales order & take payment.
     Assign payments methods to Woocommerce payment gateways.
 
-Tested with WooCommerce version 2.1.11
+Tested with WooCommerce version N/A
 
-This version requires WooCommerce version 2.1 or greater.
+This version requires WooCommerce version N/A or greater.
 
-Looking for a superier on-line accounts package try Kaskflow's <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>free 14 day trial</strong></a> - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
+Kaskflow's <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>free 14 day trial</strong></a> - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
 
 
 == Installation ==
@@ -62,6 +60,13 @@ Configure API:
 
 
 == Changelog ==
+
+= Version 0.0.91 - 20180301 =
+* Forked project to revive code base for use with WooCommerce 3.3.3
+* Initial WC_Order calls updated to ver 3.0 functions instead of earlier direct variable calls which were broken
+* Workaround applied to deal with 2 decimal point limitation for rates on KF invoice lines
+* THIS IS NOT A STABLE VERSION AND IS CURRENTLY UNTESTED
+
 
 = Version 0.0.9 - 20140621 =
 * Update - Added support for Coupons by adding a discount line to invoices
