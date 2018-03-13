@@ -136,10 +136,11 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
             $this->plugin_url = plugins_url( basename( plugin_dir_path(__FILE__) ), basename( __FILE__ ) );
 
             // Logs
-            if( get_option('ds_kashflow_debug') == 'yes' )
+            if( get_option('ds_kashflow_debug') == '1' )
             {
                 $this->debug = true;
                 $this->log = new WC_Logger();
+//DEBUG	            $this->log->add( DS_KASHFLOW , "Log Started - ".gmdate() );
             }
 
             // include files
@@ -213,7 +214,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
         */
         private function logit( $msg )
         {
-            if ( 'yes' == $this->debug )
+            if ( $this->debug )
                 $this->log->add( DS_KASHFLOW , $msg );
         } //end logit
 
@@ -454,7 +455,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
             $order_method = get_option('ds_kashflow_order_method');
             $invoice_on_complete = get_option('ds_kashflow_invoice_on_complete');
 
-            if( $order_method == 'invoice' && $invoice_on_complete == 'yes'){
+            if( $order_method == 'invoice' && $invoice_on_complete == '1'){
 
             }
             else
@@ -483,7 +484,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
                 //only update invoice with customer details on payment complete
                 $invoice_on_complete = get_option('ds_kashflow_invoice_on_complete');
-                if( $invoice_on_complete == 'yes' )
+                if( $invoice_on_complete == '1' )
                     $this->update_customer( $order_id );
 
                 $total_amount = $order->get_total();

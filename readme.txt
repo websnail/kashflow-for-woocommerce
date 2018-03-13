@@ -39,7 +39,7 @@ Installation :
 
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 
-4. Goto Woocommerce -> Settings and an Accounts Tab will appear at the top of the screen.
+4. Goto Woocommerce -> Settings and an Kashflow Tab will appear at the top of the screen.
 
 Configure API:
 
