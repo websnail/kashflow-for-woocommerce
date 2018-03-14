@@ -231,33 +231,33 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
 			// create a KashFlow customer class instance
 			$customer = new KF_Customer();
-			if ( ! empty( $order->get_billing_company ) ) {
-				$customer->Name = $order->get_billing_company;
+			if ( ! empty( $order->get_billing_company() ) ) {
+				$customer->Name = $order->get_billing_company();
 			} else {
-				$customer->Name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name;
+				$customer->Name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 			}
-			$customer->Contact                = $order->get_billing_first_name . ' ' . $order->get_billing_last_name;
-			$customer->ContactFirstName       = $order->get_billing_first_name;
-			$customer->ContactLastName        = $order->get_billing_last_name;
-			$customer->Telephone              = $order->get_billing_phone;
-			$customer->Email                  = $order->get_billing_email;
-			$customer->Address1               = $order->get_billing_address_1;
-			$customer->Address2               = $order->get_billing_address_2;
-			$customer->Address3               = $order->get_billing_city . ' ' . $order->get_billing_state;
-			$customer->Address4               = $order->get_billing_country;
-			$customer->Postcode               = $order->get_billing_postcode;
+			$customer->Contact                = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+			$customer->ContactFirstName       = $order->get_billing_first_name();
+			$customer->ContactLastName        = $order->get_billing_last_name();
+			$customer->Telephone              = $order->get_billing_phone();
+			$customer->Email                  = $order->get_billing_email();
+			$customer->Address1               = $order->get_billing_address_1();
+			$customer->Address2               = $order->get_billing_address_2();
+			$customer->Address3               = $order->get_billing_city() . ' ' . $order->get_billing_state();
+			$customer->Address4               = $order->get_billing_country();
+			$customer->Postcode               = $order->get_billing_postcode();
 			$customer->CustHasDeliveryAddress = 1;
-			$customer->DeliveryAddress1       = $order->get_shipping_address_1;
-			$customer->DeliveryAddress2       = $order->get_shipping_address_2;
-			$customer->DeliveryAddress3       = $order->get_shipping_city . ' ' . $order->get_shipping_state;
-			$customer->DeliveryAddress4       = $order->get_shipping_country;
-			$customer->DeliveryPostcode       = $order->get_shipping_postcode;
+			$customer->DeliveryAddress1       = $order->get_shipping_address_1();
+			$customer->DeliveryAddress2       = $order->get_shipping_address_2();
+			$customer->DeliveryAddress3       = $order->get_shipping_city() . ' ' . $order->get_shipping_state();
+			$customer->DeliveryAddress4       = $order->get_shipping_country();
+			$customer->DeliveryPostcode       = $order->get_shipping_postcode();
 
 			$this->logit( 'customer - ' . print_r( $customer, true ) );
 
 			// update KashFlow with customer information from WooCommerce Order
 			$customer_id = 0;
-			if ( $existing_customer = $this->api->get_customer_by_email( $order->get_billing_email ) ) {
+			if ( $existing_customer = $this->api->get_customer_by_email( $order->get_billing_email() ) ) {
 				// existing customer
 				$customer->data = array_merge( $existing_customer->data, $customer->data );
 				$this->api->update_customer( $customer );
