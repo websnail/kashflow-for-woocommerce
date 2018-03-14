@@ -282,6 +282,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
 			$order_method = get_option( 'ds_kashflow_order_method' );
 			if ( ! empty( $customer_id ) ) {
+
 				// get order totals
 				$totals                  = $order->get_order_item_totals();
 				$items                   = $order->get_items();
@@ -290,6 +291,9 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$kf_order->InvoiceNumber = $order_number;
 				$kf_order->Customer      = $customer->Name;
 				$kf_order->CustomerID    = $customer_id;
+
+				// Set the currency info
+				$kf_order->CurrencyCode  = $order->get_currency();
 
 				$order_tax      = $order->get_total_tax();
 				$order_discount = $order->get_discount_total();
