@@ -299,7 +299,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				// START Set the currency info
 				$order_base = get_post_meta( $order_id, '_order_total_base_currency', true );
 				//$total_currency = get_post_meta( $order_id, '_order_total', true );
-				$calc_exchg_rate = $order_net / $order_base;
+				$calc_exchg_rate = $order->get_total() / $order_base;
 
 				/**
 				 * If Aelia_WC_EU_VAT_Assistant is installed we could get the VAT exchange rate data
@@ -317,6 +317,21 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$kf_order->VATAmount  = $order_tax;
 				$total_amount         = $order_net + $order_tax;
 				$kf_order->AmountPaid = $total_amount;
+
+				/**
+				 * Apply any payment module specific data here
+				 */
+
+				$purchase_order_ref = '';
+
+				$pay_method = $order->get_payment_method();
+				if($pay_method == 'purchase_order') {
+					$po_data = get_post_meta( $order_id, '_purchase_order_data', false);
+					$purchase_order_ref = array_key_exists('purchase_order_number', $po_data) ? $po_data['purchase_order_number'] : '';
+                }
+
+                // Set Purchase Order reference with default Order ID if nothing else set
+                $kf_order->CustomerReference = !empty($purchase_order_ref) ? $purchase_order_ref : 'Order: '.$order_id;
 
 				$this->logit( 'sales invoice - ' . print_r( $kf_order, true ) );
 				// get sale of goods productID
@@ -347,7 +362,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 						$line_adjust  = true;    // Indicates we have a 2dp+ adjusted item
 						$qty          = 1;
 						$unit_rate    = $line_sub_total;
-						$item['name'] .= " <br>\r\n(Quantity:{$item['qty']} @ " . $line_sub_total / $item['qty'] . " (each)";
+						$item['name'] .= " <br>\r\n(Quantity:{$item['qty']} @ " . round(($line_sub_total / $item['qty']),4) . " (each)";
 						//TODO Check if use \n or <BR /> markup to newline the additional information
 					}
 
