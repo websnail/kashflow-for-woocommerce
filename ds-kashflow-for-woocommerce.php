@@ -292,13 +292,26 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$kf_order->Customer      = $customer->Name;
 				$kf_order->CustomerID    = $customer_id;
 
-				// Set the currency info
-				$kf_order->CurrencyCode  = $order->get_currency();
-
 				$order_tax      = $order->get_total_tax();
 				$order_discount = $order->get_discount_total();
 				$order_net      = $order->get_total() - $order_tax;
 
+				// START Set the currency info
+				$order_base = get_post_meta( $order_id, '_order_total_base_currency', true );
+				//$total_currency = get_post_meta( $order_id, '_order_total', true );
+				$calc_exchg_rate = $order_net / $order_base;
+
+				/**
+				 * If Aelia_WC_EU_VAT_Assistant is installed we could get the VAT exchange rate data
+                 * but it's usually based on a different rate provider (eg: HMRC) which is often
+                 * giving a different rate to the one used by the currency selector
+				 */
+				//$eu_vat_data = get_post_meta( $order_id, '_eu_vat_data', false);
+
+				$kf_order->CurrencyCode = $order->get_currency();
+				$kf_order->ExchangeRate = $calc_exchg_rate;
+
+				// END Currency Info
 
 				$kf_order->NetAmount  = $order_net;
 				$kf_order->VATAmount  = $order_tax;
@@ -875,12 +888,11 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                             id="<?php echo esc_attr( $value['id'] ); ?>"
                             style="<?php echo esc_attr( $value['css'] ); ?>"
                             class="<?php echo esc_attr( $value['class'] ); ?>"
-                    ><?php echo esc_attr( $value['label'] ); ?></label><?php echo $description; ?>
+                    ><?php echo esc_attr( $value['label'] ); ?></label><?php echo $value['desc']; ?>
                 </td>
             </tr>
 			<?php
-
-		}
+    	}
 
 		/**
 		 * admin_field_testapi
