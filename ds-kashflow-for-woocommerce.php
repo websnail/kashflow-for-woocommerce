@@ -347,7 +347,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 						$line_adjust  = true;    // Indicates we have a 2dp+ adjusted item
 						$qty          = 1;
 						$unit_rate    = $line_sub_total;
-						$item['name'] .= "\n(Quantity: {$item['qty']} @ " . $line_sub_total / $qty . " (each)";
+						$item['name'] .= " <br>\r\n(Quantity:{$item['qty']} @ " . $line_sub_total / $item['qty'] . " (each)";
 						//TODO Check if use \n or <BR /> markup to newline the additional information
 					}
 
