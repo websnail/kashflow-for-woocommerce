@@ -275,6 +275,8 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			if ( $existing_customer = $this->api->get_customer_by_email( $order->get_billing_email() ) ) {
 				// existing customer
 				$customer->data = array_merge( $existing_customer->data, $customer->data );
+				//TODO Check how arrays would merge the existing and new customer? Does new overwrite/replace old even when empty?
+
 				$this->api->update_customer( $customer );
 				$customer_id = $existing_customer->CustomerID;
 				if ( $customer_id ) {
@@ -339,8 +341,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
 				$purchase_order_ref = '';
 
-				$pay_method = $order->get_payment_method();
-				if($pay_method == 'purchase_order') {
+				if($order->get_payment_method() == 'purchase_order') {
 					$po_data = get_post_meta( $order_id, '_purchase_order_data', false);
 					$purchase_order_ref = array_key_exists('purchase_order_number', $po_data) ? $po_data['purchase_order_number'] : '';
                 }
@@ -481,10 +482,13 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			//$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
 			$invoice_on_complete = in_array( get_option('ds_kashflow_invoice_on_complete'), array(1,'yes',true)) ? true : false;
 
-			if ( $order_method == 'invoice' && $invoice_on_complete ) {
+			// We need order instance so we can test payment_method, etc...
+			$order        = new WC_Order( $order_id );
 
+			if ( $order_method == 'invoice' && $invoice_on_complete && ($order->get_payment_method() != 'purchase_order')) {
+                // Nothing to do. Order has been processed but not yet PAID
 			} else {
-				$order        = new WC_Order( $order_id );
+			    // Quote, Purchase Order or payment not required to create order
 				$order_number = $order->get_order_number() ? $order->get_order_number() : $order_id;
 				$this->update_customer( $order_number );
 			}
@@ -566,7 +570,6 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			return ( ( $regular_tax_rate * $compound_tax_rate ) - 1 ) * 100;
 
 		}
-
 
 		public function load_admin_scripts( $hook ) {
 			if ( 'post.php' != $hook ) {
