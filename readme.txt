@@ -61,6 +61,22 @@ Configure API:
 
 == Changelog ==
 
+== DEV Version - 20180317 ==
+* Multi-currency KF fields now set when non-base currency is used in transaction
+* Exchange rate calculated from $order->get_total() / $order_base;
+* Resolved debug log information using a workaround (chip in if you know what value the settings should be giving for checkbox)
+* Detects and create invoices for "WooCommerce Advanced Purchase Order Gateway" regardless of "Only send completed orders..." setting
+* Workaround for Kashflows 2 decimal point limitation tested and working.
+[ NB: Can't get it to accept newline characters or codes for line description ]
+* Tested as working for quotes
+
+TODO: Test for:
+> Invoice generation
+> Invoice generation when selecting purchase order
+> Invoice emailing
+
+
+
 = Version 0.0.91 - 20180301 =
 * Forked project to revive code base for use with WooCommerce 3.3.3
 * Initial WC_Order calls updated to ver 3.0 functions instead of earlier direct variable calls which were broken
