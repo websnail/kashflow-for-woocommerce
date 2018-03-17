@@ -138,10 +138,11 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			$this->plugin_url = plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) );
 
 			// Logs
-			if ( get_option( 'ds_kashflow_debug' ) == '1' ) {
+			if ( in_array( get_option('ds_kashflow_debug'), array(1,'yes',true))) {
 				$this->debug = true;
 				$this->log   = new WC_Logger();
-//DEBUG	            $this->log->add( DS_KASHFLOW , "Log Started - ".gmdate() );
+                //DEBUG
+                //$this->log->add( DS_KASHFLOW , "Log Started - ".gmdate() );
 			}
 
 			// include files
@@ -211,6 +212,20 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			if ( $this->debug ) {
 				$this->log->add( DS_KASHFLOW, $msg );
 			}
+			if ($this->debug) {
+				if (version_compare(WC_VERSION, '3.0', '<')) {
+					if (empty($this->log)) {
+						$this->log = new WC_Logger();
+					}
+					$this->log->add(DS_KASHFLOW, $msg);
+				} else {
+					if (empty($this->log)) {
+						$this->log = wc_get_logger();
+					}
+					$this->log->log('notice', $msg, array('source' => DS_KASHFLOW));
+				}
+			}
+
 		} //end logit
 
 		/**
@@ -463,9 +478,10 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			$this->logit( 'checkout_order_processed - called' );
 
 			$order_method        = get_option( 'ds_kashflow_order_method' );
-			$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
+			//$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
+			$invoice_on_complete = in_array( get_option('ds_kashflow_invoice_on_complete'), array(1,'yes',true)) ? true : false;
 
-			if ( $order_method == 'invoice' && $invoice_on_complete == '1' ) {
+			if ( $order_method == 'invoice' && $invoice_on_complete ) {
 
 			} else {
 				$order        = new WC_Order( $order_id );
@@ -490,8 +506,9 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$order = new WC_Order( $order_id );
 
 				//only update invoice with customer details on payment complete
-				$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
-				if ( $invoice_on_complete == '1' ) {
+				//$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
+				$invoice_on_complete = in_array( get_option('ds_kashflow_invoice_on_complete'), array(1,'yes',true)) ? true : false;
+				if ( $invoice_on_complete ) {
 					$this->update_customer( $order_id );
 				}
 
