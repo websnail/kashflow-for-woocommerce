@@ -305,7 +305,13 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$items                   = $order->get_items();
 				$kf_order                = ( $order_method === 'quote' ) ? new KF_Quote( ! count( $items ) ) : new KF_Invoice( ! count( $items ) );
 				$order_number            = $order->get_order_number() ? $order->get_order_number() : $order_id;
-				$kf_order->InvoiceNumber = $order_number;
+
+                /*
+                 * Specifying the InvoiceNumber would overwrite anything in KashFlow that already existed for the same reference
+                 * So, we disabled this immediately!
+                 */
+				//DISABLED $kf_order->InvoiceNumber = $order_number;
+
 				$kf_order->Customer      = $customer->Name;
 				$kf_order->CustomerID    = $customer_id;
 
@@ -345,7 +351,6 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 					$po_data = get_post_meta( $order_id, '_purchase_order_data', false);
 					$purchase_order_ref = array_key_exists('purchase_order_number', $po_data) ? $po_data['purchase_order_number'] : '';
                 }
-
                 // Set Purchase Order reference with default Order ID if nothing else set
                 $kf_order->CustomerReference = !empty($purchase_order_ref) ? $purchase_order_ref : 'Order: '.$order_id;
 
