@@ -238,7 +238,14 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
 		}
 
+		/**
+		 * Generate a Kashflow Invoice or Quote for a WooCommerce order
+         * @param   $order_id -> WooCommerce Order_id (same as WP Post_id)
+         * @return  $kf_invoice_id -> The Kashflow Invoice ID generated from the Order
+		 */
 		private function update_customer( $order_id ) {
+
+			$kf_invoice_id = false;
 			$order = new WC_Order( $order_id );
 			$this->logit( 'order - ' . print_r( $order, true ) );
 
@@ -459,17 +466,20 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 
 					$lines[] = $line;
 				}
-				$kf_order_id = ( $order_method === 'quote' ) ? $this->api->insert_quote( $kf_order, $lines ) : $this->api->insert_invoice( $kf_order, $lines );
-				if ( $kf_order_id ) {
+				$kf_invoice_id = ( $order_method === 'quote' ) ? $this->api->insert_quote( $kf_order, $lines ) : $this->api->insert_invoice( $kf_order, $lines );
+				if ( $kf_invoice_id ) {
+				    // Save the Kashflow Invoice Ref to the order_meta
+					update_post_meta($order_id, 'kashflow_invoice_id', $kf_invoice_id);
+
 					$sales_type = $order_method === 'quote' ? 'Quote' : 'Invoice';
-					$this->logit( 'Sales ' . $sales_type . ' ID: ' . $kf_order_id );
+					$this->logit( 'Sales ' . $sales_type . ' ID: ' . $kf_invoice_id );
 				} else {
 					$this->logit( 'Sales quote/invoice error: ' . $this->api->get_last_error() );
 				}
 			} else {
 				$this->logit( 'No customer id' );
 			}
-
+			return $kf_invoice_id;
 		}
 
 		/**
@@ -491,18 +501,20 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			$order        = new WC_Order( $order_id );
 
 			if ( $order_method == 'invoice' && $invoice_on_complete && ($order->get_payment_method() != 'purchase_order')) {
-                // Nothing to do. Order has been processed but not yet PAID
+                // Nothing to do. Order has been processed but not yet PAID and it's not a purchase order
 			} else {
-			    // Quote, Purchase Order or payment not required to create order
+			    // Quote, Purchase Order or payment is not required to create the KF Invoice
 				$order_number = $order->get_order_number() ? $order->get_order_number() : $order_id;
-				$this->update_customer( $order_number );
+				$kf_invoice_id = $this->update_customer( $order_number );
 			}
 		}
 
 		/**
 		 * payment complete
 		 *
-		 * once payment has been taken update KashFlow
+		 * Apply a payment record against the Kashflow Invoice
+         * Updated to use the $kf_invoice_id returned by update_customer
+         * ..or the kashflow_invoice_id stored in post meta
 		 *
 		 * @param int $order_id
 		 */
@@ -514,28 +526,40 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			} else {
 				$order = new WC_Order( $order_id );
 
-				//only update invoice with customer details on payment complete
-				//$invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
+				// only update invoice with customer details on payment complete
+				// $invoice_on_complete = get_option( 'ds_kashflow_invoice_on_complete' );
 				$invoice_on_complete = in_array( get_option('ds_kashflow_invoice_on_complete'), array(1,'yes',true)) ? true : false;
+				$kf_invoice_id = false;
 				if ( $invoice_on_complete ) {
-					$this->update_customer( $order_id );
+					$kf_invoice_id = $this->update_customer( $order_id );
 				}
+				if(!$kf_invoice_id) {
+				    $kf_invoice_id = get_post_meta($order_id, 'kashflow_invoice_id', true);
+                }
+                /**
+                 * You need the Kashflow Order (Invoice) ID to apply the payment to
+                 * You can't use the WC order ID as Kashflow won't always mirror your WooCommerce Order references to KF Invoice ID's
+                 */
+                if($kf_invoice_id !== false && $kf_invoice_id > 0) {
 
-				$total_amount                = $order->get_total();
-				$invoice_payment             = new KF_Invoice_Payment();
-				$order_number                = $order->get_order_number() ? $order->get_order_number() : $order_id;
-				$invoice_payment->PayInvoice = $order_number;
-				$invoice_payment->PayAmount  = $total_amount;
-				if ( $pay_method = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() ) ) {
-					$invoice_payment->PayMethod = $pay_method;
-					$this->logit( 'sales invoice payment method - ' . $pay_method );
-				}
-				if ( $bank_account = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() . '_bank_account' ) ) {
-					$invoice_payment->PayAccount = $bank_account;
-				}
+	                $total_amount                = $order->get_total();
+	                $invoice_payment             = new KF_Invoice_Payment();
+	                $invoice_payment->PayInvoice = $kf_invoice_id;
+	                $invoice_payment->PayAmount  = $total_amount;
+	                if ( $pay_method = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() ) ) {
+		                $invoice_payment->PayMethod = $pay_method;
+		                $this->logit( 'sales invoice payment method - ' . $pay_method );
+	                }
+	                if ( $bank_account = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() . '_bank_account' ) ) {
+		                $invoice_payment->PayAccount = $bank_account;
+	                }
 
-				$invoice_response = $this->api->insert_invoice_payment( $invoice_payment );
-				$this->logit( 'sales invoice payment - ' . print_r( $invoice_response, true ) );
+	                $invoice_response = $this->api->insert_invoice_payment( $invoice_payment );
+	                $this->logit( 'sales invoice payment - ' . print_r( $invoice_response, true ) );
+                }
+                else {
+	                $this->logit( 'sales invoice payment - UNABLE TO COMPLETE - No Kashflow Invoice ID to apply payment to' );
+                }
 			}
 		}
 
