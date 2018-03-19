@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: websnail, swicks
-Tags: kashflow, accounts, accounting, woocommerce, woothemes, devicesoftware, snailsolutions
+Tags: kashflow, accounts, accounting, woocommerce, woothemes, snailsolutions
 Requires at least:
 Tested up to:
 Stable tag:
@@ -15,19 +15,14 @@ PLUGIN REVIVED 01/03/18 by websnail
 
 This plugin links your orders to an online accounts package call KashFlow.
 
-To help with the support of this plugin and to allow us to enhance it's functionality, please <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">create an account</a> with KashFlow - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
-KashFlow offer a <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>14 Day free trial</strong></a> on their on-line accounting application.
-
 Current functionality:-
-    Automatically add/update customers automatically when orders are place.
-    Generate a sales order & take payment.
-    Assign payments methods to Woocommerce payment gateways.
+    Automatically add/update customers in Kashflow when orders are placed.
+    Generate a Kashflow sales invoice & assign payment to that invoice
+    Associate WooCommerce payment gateways with Kashflow payment methods (via settings)
 
-Tested with WooCommerce version N/A
+Tested with WooCommerce version 3.3.3
 
-This version requires WooCommerce version N/A or greater.
-
-Kaskflow's <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>free 14 day trial</strong></a> - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
+This version requires WooCommerce version: Unknown
 
 
 == Installation ==
@@ -45,7 +40,7 @@ Configure API:
 
 1. Add your 'username' (this is usually the same as your login name).
 
-2. Add your API password (I recommend you don't use your normal login password) - <a rel="nofollow" title "devicesoftware kashflow setup" href="http://devicesoftware.com/setup-kashflow-api/" >setup KashFlow API</a> 
+2. Add your API password (Recommend you do not use your normal login password) - <a rel="nofollow" title "devicesoftware kashflow setup" href="http://devicesoftware.com/setup-kashflow-api/" >setup KashFlow API</a>
 
 3. Press the Test API to confirm that the API is correctly configured.
 
@@ -61,6 +56,16 @@ Configure API:
 
 == Changelog ==
 
+== DEV Version - 20180319 ==
+* Now stores the Kashflow generated Invoice_id in post_meta -> 'kashflow_invoice_id'
+* Fixed: Removes the assumption/requirement that Kashflow invoice_id's match WC Order_id's
+* Fixed: Correctly assigns payment to the Kashflow Invoice generated from the WC Order
+* Tested: Generates Invoice correctly
+* Tested: Assigns Payment to invoice
+
+TODO: Test Invoice emailing
+
+
 == DEV Version - 20180317 ==
 * Multi-currency KF fields now set when non-base currency is used in transaction
 * Exchange rate calculated from $order->get_total() / $order_base;
@@ -69,12 +74,6 @@ Configure API:
 * Workaround for Kashflows 2 decimal point limitation tested and working.
 [ NB: Can't get it to accept newline characters or codes for line description ]
 * Tested as working for quotes
-
-TODO: Test for:
-> Invoice generation
-> Invoice generation when selecting purchase order
-> Invoice emailing
-
 
 
 = Version 0.0.91 - 20180301 =
