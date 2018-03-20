@@ -630,7 +630,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 				$kf_invoice_id = get_post_meta($_POST['invOrderNumber'], 'kashflow_invoice_id', true);
 
 				if(!$kf_invoice_id || $kf_invoice_id <= 0) {
-					$result['error'] = 'Invalid response';
+					$result['error'] = 'Kashflow Invoice reference not found - Unable to send';
                 }
 			    elseif ( isset( $_POST['invTo'] ) ) {
 					$result['success'] = true;
