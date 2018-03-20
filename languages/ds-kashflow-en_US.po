@@ -223,7 +223,7 @@ msgstr ""
 
 #: ds-kashflow-for-woocommerce.php:576
 #@ ds-kashflow
-msgid "Invoice "
+msgid "Invoice for Order "
 msgstr ""
 
 #: ds-kashflow-for-woocommerce.php:576

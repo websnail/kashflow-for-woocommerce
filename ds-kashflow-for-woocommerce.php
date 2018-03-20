@@ -625,13 +625,20 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			$result = array( 'success' => false );
 			// check validity of ajax call
 			if ( isset( $_POST['invNonce'] ) && wp_verify_nonce( $_POST['invNonce'], 'ds_kashflow_inv_nonce' ) ) {
-				if ( isset( $_POST['invTo'] ) ) {
+
+			    // Get KF Invoice_id
+				$kf_invoice_id = get_post_meta($_POST['invOrderNumber'], 'kashflow_invoice_id', true);
+
+				if(!$kf_invoice_id || $kf_invoice_id <= 0) {
+					$result['error'] = 'Invalid response';
+                }
+			    elseif ( isset( $_POST['invTo'] ) ) {
 					$result['success'] = true;
 					// loop through email addresses
 					$emails = explode( ',', $_POST['invTo'] );
 					foreach ( $emails as $email ) {
 						// email invoice
-						$res = $this->api->email_invoice( $_POST['invOrderNumber'], $_POST['invSenderEmail'], $_POST['invSenderName'], $_POST['invSubject'], $_POST['invBody'], trim( $email ) );
+						$res = $this->api->email_invoice( $kf_invoice_id, $_POST['invSenderEmail'], $_POST['invSenderName'], $_POST['invSubject'], $_POST['invBody'], trim( $email ) );
 						if ( $res === false ) {
 							$result['success'] = false;
 							$result['error']   = $this->api->get_last_error();
@@ -659,7 +666,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
                 <p class="form-field">
                     <label for="ds_kashflow_inv_subject"><?php _e( 'Subject:', 'ds-kashflow' ); ?></label><br/>
                     <input id="ds_kashflow_inv_subject" type="text"
-                           value="<?php echo __( 'Invoice ', 'ds-kashflow' ) . $order_number . __( ' from ', 'ds-kashflow' ) . $company_details['CompanyName']; ?>"/>
+                           value="<?php echo __( 'Invoice for Order ', 'ds-kashflow' ) . $order_number . __( ' from ', 'ds-kashflow' ) . $company_details['CompanyName']; ?>"/>
                 </p>
                 <p class="form-field">
                     <label for="ds_kashflow_inv_body"><?php _e( 'Message:', 'ds-kashflow' ); ?></label><br/>
