@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: Kashflow for Woocommerce
-Plugin URI: http://devicesoftware.com/kashflow-for-woocommerce/
-Description: Kashflow for woocommerce
-Version: 0.0.9
-Author: DeviceSoftware
-Author URI: http://devicesoftware.com/kashflow-for-woocommerce/
+Plugin URI:
+Description: Kashflow addon for woocommerce
+Version: 0.0.91
+Maintained By: WebSnail (2018)
+Original Author: DeviceSoftware
+Author URI:
 
 Text Domain: ds-kashflow
 Domain Path: /languages/ 
@@ -13,7 +14,7 @@ Domain Path: /languages/
 * 
 */
 
-/*  Copyright 2013  Devicesoftware  (email : support@devicesoftware.com) 
+/*  Copyright 2018  Snailsolutions  (email : info@snailsolutions.net)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -27,6 +28,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA    
+
+* 0.0.91 - 2018-03-19 RELEASE
+*   Update: Fixed for use with WC 3.x
+*   Feature: No longer uses order_id as Kashflow->InvoiceID, instead stored the invoice_id in post_meta
+*   Feature: Allows invoice generation when used with Purchase_order addon
+*   Feature: Does not create erronous Invoice totals in KF when product unit price requires in more than 2 decimal points
+
 
 * 0.0.9 - 2014-06-21
 *   Update: Added support for Coupons by adding a discount line to invoices
