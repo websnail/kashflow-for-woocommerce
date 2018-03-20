@@ -56,7 +56,7 @@ Configure API:
 
 == Changelog ==
 
-== DEV Version - 20180319 ==
+= Version 0.0.91
 * Now stores the Kashflow generated Invoice_id in post_meta -> 'kashflow_invoice_id'
 * Fixed: Removes the assumption/requirement that Kashflow invoice_id's match WC Order_id's
 * Fixed: Correctly assigns payment to the Kashflow Invoice generated from the WC Order
@@ -65,8 +65,7 @@ Configure API:
 
 TODO: Test Invoice emailing
 
-
-== DEV Version - 20180317 ==
+= DEV Version - 20180317 ==
 * Multi-currency KF fields now set when non-base currency is used in transaction
 * Exchange rate calculated from $order->get_total() / $order_base;
 * Resolved debug log information using a workaround (chip in if you know what value the settings should be giving for checkbox)
@@ -76,7 +75,7 @@ TODO: Test Invoice emailing
 * Tested as working for quotes
 
 
-= Version 0.0.91 - 20180301 =
+= DEV Version - 20180301 ==
 * Forked project to revive code base for use with WooCommerce 3.3.3
 * Initial WC_Order calls updated to ver 3.0 functions instead of earlier direct variable calls which were broken
 * Workaround applied to deal with 2 decimal point limitation for rates on KF invoice lines
