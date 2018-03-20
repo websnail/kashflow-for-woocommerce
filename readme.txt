@@ -1,35 +1,28 @@
 === Plugin Name ===
-Contributors: swicks
-Donate link: http://devicesoftware.com/kashflow-for-woocommerce/
-Tags: kashflow, accounts, accounting, woocommerce, woothemes, devicesoftware
-Requires at least: 3.5
-Tested up to: 3.9.1
-Stable tag: 0.0.9
+Contributors: websnail, swicks
+Tags: kashflow, accounts, accounting, woocommerce, woothemes, snailsolutions
+Requires at least:
+Tested up to:
+Stable tag:
 
 KashFlow for WooCommerce
 
 == Description ==
 
 *****************************************
-THIS PLUGIN IS NO LONGER BEING DEVELOPED.
+PLUGIN REVIVED 01/03/18 by websnail
 *****************************************
-
 
 This plugin links your orders to an online accounts package call KashFlow.
 
-To help with the support of this plugin and to allow us to enhance it's functionality, please <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">create an account</a> with KashFlow - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
-KashFlow offer a <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>14 Day free trial</strong></a> on their on-line accounting application.
-
 Current functionality:-
-    Automatically add/update customers automatically when orders are place.
-    Generate a sales order & take payment.
-    Assign payments methods to Woocommerce payment gateways.
+    Automatically add/update customers in Kashflow when orders are placed.
+    Generate a Kashflow sales invoice & assign payment to that invoice
+    Associate WooCommerce payment gateways with Kashflow payment methods (via settings)
 
-Tested with WooCommerce version 2.1.11
+Tested with WooCommerce version 3.3.3
 
-This version requires WooCommerce version 2.1 or greater.
-
-Looking for a superier on-line accounts package try Kaskflow's <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank"><strong>free 14 day trial</strong></a> - <a title="Free 14 Day Trial" href="http://www.kashflow.co.uk/register.asp?code=WOO1234567" target="_blank">click here.</a>
+This version requires WooCommerce version: Unknown
 
 
 == Installation ==
@@ -41,13 +34,13 @@ Installation :
 
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 
-4. Goto Woocommerce -> Settings and an Accounts Tab will appear at the top of the screen.
+4. Goto Woocommerce -> Settings and an Kashflow Tab will appear at the top of the screen.
 
 Configure API:
 
 1. Add your 'username' (this is usually the same as your login name).
 
-2. Add your API password (I recommend you don't use your normal login password) - <a rel="nofollow" title "devicesoftware kashflow setup" href="http://devicesoftware.com/setup-kashflow-api/" >setup KashFlow API</a> 
+2. Add your API password (Recommend you do not use your normal login password) - <a rel="nofollow" title "devicesoftware kashflow setup" href="http://devicesoftware.com/setup-kashflow-api/" >setup KashFlow API</a>
 
 3. Press the Test API to confirm that the API is correctly configured.
 
@@ -62,6 +55,32 @@ Configure API:
 
 
 == Changelog ==
+
+= Version 0.0.91
+* Now stores the Kashflow generated Invoice_id in post_meta -> 'kashflow_invoice_id'
+* Fixed: Removes the assumption/requirement that Kashflow invoice_id's match WC Order_id's
+* Fixed: Correctly assigns payment to the Kashflow Invoice generated from the WC Order
+* Tested: Generates Invoice correctly
+* Tested: Assigns Payment to invoice
+
+TODO: Test Invoice emailing
+
+= DEV Version - 20180317 ==
+* Multi-currency KF fields now set when non-base currency is used in transaction
+* Exchange rate calculated from $order->get_total() / $order_base;
+* Resolved debug log information using a workaround (chip in if you know what value the settings should be giving for checkbox)
+* Detects and create invoices for "WooCommerce Advanced Purchase Order Gateway" regardless of "Only send completed orders..." setting
+* Workaround for Kashflows 2 decimal point limitation tested and working.
+[ NB: Can't get it to accept newline characters or codes for line description ]
+* Tested as working for quotes
+
+
+= DEV Version - 20180301 ==
+* Forked project to revive code base for use with WooCommerce 3.3.3
+* Initial WC_Order calls updated to ver 3.0 functions instead of earlier direct variable calls which were broken
+* Workaround applied to deal with 2 decimal point limitation for rates on KF invoice lines
+* THIS IS NOT A STABLE VERSION AND IS CURRENTLY UNTESTED
+
 
 = Version 0.0.9 - 20140621 =
 * Update - Added support for Coupons by adding a discount line to invoices
