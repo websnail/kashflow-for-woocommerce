@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: Kashflow for Woocommerce
-Plugin URI: http://devicesoftware.com/kashflow-for-woocommerce/
-Description: Kashflow for woocommerce
-Version: 0.0.9
-Author: DeviceSoftware
-Author URI: http://devicesoftware.com/kashflow-for-woocommerce/
+Plugin URI:
+Description: Kashflow addon for woocommerce
+Version: 0.0.91
+Maintained By: WebSnail (2018)
+Original Author: DeviceSoftware
+Author URI:
 
 Text Domain: ds-kashflow
 Domain Path: /languages/ 
@@ -13,7 +14,7 @@ Domain Path: /languages/
 * 
 */
 
-/*  Copyright 2013  Devicesoftware  (email : support@devicesoftware.com) 
+/*  Copyright 2018  Snailsolutions  (email : info@snailsolutions.net)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -27,6 +28,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA    
+
+* 0.0.91 - 2018-03-19 RELEASE
+*   Update: Fixed for use with WC 3.x
+*   Feature: No longer uses order_id as Kashflow->InvoiceID, instead stored the invoice_id in post_meta
+*   Feature: Allows invoice generation when used with Purchase_order addon
+*   Feature: Does not create erronous Invoice totals in KF when product unit price requires in more than 2 decimal points
 
 * 0.0.9 - 2014-06-21
 *   Update: Added support for Coupons by adding a discount line to invoices
@@ -553,9 +560,19 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 	                if ( $bank_account = get_option( 'ds_kashflow_gw_' . $order->get_payment_method() . '_bank_account' ) ) {
 		                $invoice_payment->PayAccount = $bank_account;
 	                }
-
-	                $invoice_response = $this->api->insert_invoice_payment( $invoice_payment );
-	                $this->logit( 'sales invoice payment - ' . print_r( $invoice_response, true ) );
+                    /*
+                     * Do not create invoice payment record for Paypal records
+                     * as Paypal integration in Kashflow will import these separately with more information
+                     * You can assign the payments via the import mechanism in Kashflow
+                     * TODO: Apply setting to enable/disable this option
+                     */
+	                if( preg_match('/paypal/i', $order->get_payment_method()) ) {
+                        $this->logit( 'sales invoice payment - Skipped. Paypal payments handled through Kashflow import system' );
+                    }
+                    else {
+                        $invoice_response = $this->api->insert_invoice_payment($invoice_payment);
+                        $this->logit('sales invoice payment - ' . print_r($invoice_response, true));
+                    }
                 }
                 else {
 	                $this->logit( 'sales invoice payment - UNABLE TO COMPLETE - No Kashflow Invoice ID to apply payment to' );
@@ -617,13 +634,20 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 			$result = array( 'success' => false );
 			// check validity of ajax call
 			if ( isset( $_POST['invNonce'] ) && wp_verify_nonce( $_POST['invNonce'], 'ds_kashflow_inv_nonce' ) ) {
-				if ( isset( $_POST['invTo'] ) ) {
+
+			    // Get KF Invoice_id
+				$kf_invoice_id = get_post_meta($_POST['invOrderNumber'], 'kashflow_invoice_id', true);
+
+				if(!$kf_invoice_id || $kf_invoice_id <= 0) {
+					$result['error'] = 'Kashflow Invoice reference not found - Unable to send';
+                }
+			    elseif ( isset( $_POST['invTo'] ) ) {
 					$result['success'] = true;
 					// loop through email addresses
 					$emails = explode( ',', $_POST['invTo'] );
 					foreach ( $emails as $email ) {
 						// email invoice
-						$res = $this->api->email_invoice( $_POST['invOrderNumber'], $_POST['invSenderEmail'], $_POST['invSenderName'], $_POST['invSubject'], $_POST['invBody'], trim( $email ) );
+						$res = $this->api->email_invoice( $kf_invoice_id, $_POST['invSenderEmail'], $_POST['invSenderName'], $_POST['invSubject'], $_POST['invBody'], trim( $email ) );
 						if ( $res === false ) {
 							$result['success'] = false;
 							$result['error']   = $this->api->get_last_error();
