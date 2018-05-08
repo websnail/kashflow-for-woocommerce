@@ -411,6 +411,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 					$line->LineID      = $cnt ++;
 					$vat_rate          = $this->calc_item_tax_rate( $product );
 					$line->VatRate     = $vat_rate;
+                    $line->ValuesInCurrency = 1;    // Ensure KF doesn't process as a GBP value (ie: apply exchange rate)
 
 					$sku = $product->get_sku();
 					if ( ! empty( $sku ) ) {
@@ -450,6 +451,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 					$line->ChargeType  = isset( $item['charge_type'] ) ? (int) $item['charge_type'] : $default_sale_of_goods;
 					$line->LineID      = $cnt ++;
 					$line->VatRate     = 0;
+                    $line->ValuesInCurrency = 1;    // Ensure KF doesn't process as a GBP value (ie: apply exchange rate)
 
 					$this->logit( 'sales quote/invoice discount item - ' . print_r( $line, true ) );
 
@@ -468,6 +470,7 @@ if ( ! class_exists( 'Ds_Kashflow' ) ) {
 					$line->ChargeType  = get_option( 'ds_kashflow_shipping_type' ) ? get_option( 'ds_kashflow_shipping_type' ) : $default_sale_of_goods;
 					$line->LineID      = $cnt ++;
 					$line->VatRate     = $this->calc_shipping_tax_rate();
+                    $line->ValuesInCurrency = 1;    // Ensure KF doesn't process as a GBP value (ie: apply exchange rate)
 
 					$this->logit( 'sales quote/invoice shipping item - ' . print_r( $line, true ) );
 
